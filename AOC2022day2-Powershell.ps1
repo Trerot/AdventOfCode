@@ -1,53 +1,64 @@
 $stuff = get-content .\AOC2022day2-PuzzleInput.txt
-
 [int]$loss = 0
 [int]$draw = 3
 [int]$win = 6
-
 [int]$rock = 1
 [int]$paper = 2
 [int]$scissors = 3
-
-[int]$global:score = 0
-
-function Play-RockPaperScissors {
-    param (
-        $Me,
-        $Opponent
-    )
-
-    
-}
-
-
+[int]$score = 0
 $stuff.foreach({
         $Opponent, $Me = $_.Split(" ")
-
         switch ($Opponent) {
             "A" { 
                 switch ($Me) {
-                    "X" { $global:score += $rock + $draw }
-                    "Y" { $global:score += $paper + $win }
-                    "Z" { $global:score += $scissors + $loss }
+                    "X" { $score += $rock + $draw }
+                    "Y" { $score += $paper + $win }
+                    "Z" { $score += $scissors + $loss }
                 }
             }
             "B" { 
                 switch ($Me) {
-                    "X" { $global:score += $rock + $loss }
-                    "Y" { $global:score += $paper + $draw }
-                    "Z" { $global:score += $scissors + $win }
+                    "X" { $score += $rock + $loss }
+                    "Y" { $score += $paper + $draw }
+                    "Z" { $score += $scissors + $win }
                 }
             }
             "C" { 
                 switch ($Me) {
-                    "X" { $global:score += $rock + $win }
-                    "Y" { $global:score += $paper + $loss }
-                    "Z" { $global:score += $scissors + $draw}
+                    "X" { $score += $rock + $win }
+                    "Y" { $score += $paper + $loss }
+                    "Z" { $score += $scissors + $draw }
                 }
             }
         }
-
     })
-    $global:Score 
-    # task 2
-$stuff = "A Y","B X","C Z"
+$Score 
+# task 2
+[int]$score = 0  
+$stuff.foreach({
+        $Opponent, $Me = $_.Split(" ")
+        switch ($Opponent) {
+            "A" { 
+                switch ($Me) {
+                    "X" { $score += $loss + $scissors }
+                    "Y" { $score += $draw + $rock }
+                    "Z" { $score += $win + $paper }
+                }
+            }
+            "B" { 
+                switch ($Me) {
+                    "X" { $score += $loss + $rock }
+                    "Y" { $score += $draw + $paper }
+                    "Z" { $score += $win + $scissors }
+                }
+            }
+            "C" { 
+                switch ($Me) {
+                    "X" { $score += $loss + $paper }
+                    "Y" { $score += $draw + $scissors }
+                    "Z" { $score += $win + $rock }
+                }
+            }
+        }
+    })
+$Score
