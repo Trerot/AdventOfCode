@@ -1,4 +1,4 @@
-$stuff = get-content .\AOC2022day2-PuzzleInput.txt
+$stuff2 = get-content .\day2\AOC2022day2-PuzzleInput.txt
 [int]$loss = 0
 [int]$draw = 3
 [int]$win = 6
@@ -6,7 +6,7 @@ $stuff = get-content .\AOC2022day2-PuzzleInput.txt
 [int]$paper = 2
 [int]$scissors = 3
 [int]$score = 0
-$stuff.foreach({
+$stuff2.foreach({
         $Opponent, $Me = $_.Split(" ")
         switch ($Opponent) {
             "A" { 
@@ -35,7 +35,7 @@ $stuff.foreach({
 $Score 
 # task 2
 [int]$score = 0  
-$stuff.foreach({
+$stuff2.foreach({
         $Opponent, $Me = $_.Split(" ")
         switch ($Opponent) {
             "A" { 

@@ -1,4 +1,4 @@
-#$stuff = get-content ".\day3\AOC2022day3-PuzzleInput.txt"
+$stuff = get-content ".\day3\AOC2022day3-PuzzleInput.txt"
 $array = 'a'..'z' + 'A'..'Z'
 $counter = 1
 $hash = @{}
@@ -15,15 +15,19 @@ $stuff.ForEach({
         $sum += $hash[$theThing]
     })
 $sum
-
 # part two!
 $sum = 0
-for ($i = 0; $i -lt $stuff.count - 3; $i += 3) {
+for ($i = 0; $i -lt $stuff.count; $i += 3) {
 
-    $trioOfTrios = $null
-    $stuff[$i..($i - 3)].foreach({
-            $trioOfTrios += ($_.tochararray() | Group-Object).where({ $_.count -eq 1 }).name.foreach({ [char]$_ })
+    $previous = $null
+    $stuff[$i..($i + 2)].foreach({
+        $Current = $_.tochararray()
+        if($null -ne $previous){
+           $previous = (Compare-Object $Current $previous -IncludeEqual -ExcludeDifferent).inputobject
+        }
+        else{$previous = $Current}
         })
-
+        $previous
+        $sum += $hash[[char]$previous[0]]
 }
-# groups of three, all carry same badge, for other items, max two carry it.
+$sum
