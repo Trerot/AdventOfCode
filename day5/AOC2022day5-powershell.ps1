@@ -1,37 +1,6 @@
 $stuff = get-content "day5\AOC2022da5-puzzleinput.txt"
-
-# doing it the dumb way for now
 $stack = $stuff[0..7]
 $instructionset = $stuff[10..($stuff.count - 1)]
-
-# stacked arrays
-$Global:one = New-Object -TypeName System.Collections.ArrayList
-$Global:two = New-Object -TypeName System.Collections.ArrayList
-$Global:three = New-Object -TypeName System.Collections.ArrayList
-$Global:four = New-Object -TypeName System.Collections.ArrayList
-$Global:five = New-Object -TypeName System.Collections.ArrayList
-$Global:six = New-Object -TypeName System.Collections.ArrayList
-$Global:seven = New-Object -TypeName System.Collections.ArrayList
-$Global:eight = New-Object -TypeName System.Collections.ArrayList
-$Global:nine = New-Object -TypeName System.Collections.ArrayList
-$Global:ten = New-Object -TypeName System.Collections.ArrayList
-
-
-for ($i = 7; $i -ge 0; $i += -1) {
-    $stack[$i].ForEach({
-            # [1, 5, 9, 13, 17, 21, 25, 29, 33]
-            if ($_[1] -ne " ") { [void]$one.add([char]$_[1]) }
-            if ($_[5] -ne " ") { [void]$two.add([char]$_[5]) }
-            if ($_[9] -ne " ") { [void]$three.add([char]$_[9]) }
-            if ($_[13] -ne " ") { [void]$four.add([char]$_[13]) }
-            if ($_[17] -ne " ") { [void]$five.add([char]$_[17]) }
-            if ($_[21] -ne " ") { [void]$six.add([char]$_[21]) }
-            if ($_[25] -ne " ") { [void]$seven.add([char]$_[25]) }
-            if ($_[29] -ne " ") { [void]$eight.add([char]$_[29]) }
-            if ($_[33] -ne " ") { [void]$nine.add([char]$_[33]) }                          
-        })
-}
-
 function Remove-Block {
     [CmdletBinding()]
     param (
@@ -51,7 +20,6 @@ function Remove-Block {
             10 { if ($Global:ten.count -gt 0) { $Global:ten.RemoveAt($($Global:ten.count - 1)) } }
         }
     }
-
 }
 function Add-Block {
     [CmdletBinding()]
@@ -59,7 +27,6 @@ function Add-Block {
         $moveto,
         $blockvalue
     )
-
     process {
         switch ($moveto) {
             1 { [void]$Global:one.add($blockvalue) }
@@ -74,7 +41,6 @@ function Add-Block {
             10 { [void]$Global:ten.add($blockvalue) }
         }
     }
-
 }
 function Move-Block {
     [CmdletBinding()]
@@ -100,72 +66,66 @@ function Move-Block {
         Add-Block -moveto $moveto -blockvalue $blockvalue
     }
 }
-
-#task 1
-
-$instructionset.foreach({
-        $null, [int]$moveamount, $null, [int]$movefrom, $null, [int]$moveto = $_.split(" ")
-        while ($moveamount -gt 0) {
-            Move-Block -movefrom $movefrom -moveto $moveto
-            $moveamount = $moveamount - 1
-        } 
-    })
-$one[-1] + $two[-1] + $three[-1] + $four[-1] + $five[-1] + $six[-1] + $seven[-1] + $eight[-1] + $nine[-1]
-
-#task 2
-$instructionset.foreach({
-        $null, [int]$moveamount, $null, [int]$movefrom, $null, [int]$moveto = $_.split(" ")
-        $firstmove = $moveamount
-        $secondmove = $moveamount
-        while ($firstmove -gt 0) {
-
-            Move-Block -movefrom $movefrom -moveto 10
-            $firstmove = $firstmove - 1
-        } 
-        while ($secondmove -gt 0) {
-            Move-Block -movefrom 10 -moveto $moveto
-            $secondmove = $secondmove - 1
-        }
-    })
-
-$one[-1] + $two[-1] + $three[-1] + $four[-1] + $five[-1] + $six[-1] + $seven[-1] + $eight[-1] + $nine[-1]
-
 function Invoke-Instructionset {
     [CmdletBinding()]
     param (
         $instructionset,
-        [switch]$task1,
-        [switch]$task2
+        [int32]$tasknumber
     )
-    begin {}
+    begin {
+        $Global:one = New-Object -TypeName System.Collections.ArrayList
+        $Global:two = New-Object -TypeName System.Collections.ArrayList
+        $Global:three = New-Object -TypeName System.Collections.ArrayList
+        $Global:four = New-Object -TypeName System.Collections.ArrayList
+        $Global:five = New-Object -TypeName System.Collections.ArrayList
+        $Global:six = New-Object -TypeName System.Collections.ArrayList
+        $Global:seven = New-Object -TypeName System.Collections.ArrayList
+        $Global:eight = New-Object -TypeName System.Collections.ArrayList
+        $Global:nine = New-Object -TypeName System.Collections.ArrayList
+        $Global:ten = New-Object -TypeName System.Collections.ArrayList
+        for ($i = 7; $i -ge 0; $i += -1) {
+            $stack[$i].ForEach({
+                    if ($_[1] -ne " ") { [void]$Global:one.add([char]$_[1]) }
+                    if ($_[5] -ne " ") { [void]$Global:two.add([char]$_[5]) }
+                    if ($_[9] -ne " ") { [void]$Global:three.add([char]$_[9]) }
+                    if ($_[13] -ne " ") { [void]$Global:four.add([char]$_[13]) }
+                    if ($_[17] -ne " ") { [void]$Global:five.add([char]$_[17]) }
+                    if ($_[21] -ne " ") { [void]$Global:six.add([char]$_[21]) }
+                    if ($_[25] -ne " ") { [void]$Global:seven.add([char]$_[25]) }
+                    if ($_[29] -ne " ") { [void]$Global:eight.add([char]$_[29]) }
+                    if ($_[33] -ne " ") { [void]$Global:nine.add([char]$_[33]) }                          
+                })
+        }
+    }
     process {
         $instructionset.foreach({
                 $null, [int]$moveamount, $null, [int]$movefrom, $null, [int]$moveto = $_.split(" ")
-                if ($task1) {
-                    while ($moveamount -gt 0) {
-                        Move-Block -movefrom $movefrom -moveto $moveto
-                        $moveamount = $moveamount - 1
-                    } 
-                }
-                if ($task2) {
-                    while ($moveamount -gt 0) {
-                        $firstmove = $moveamount
-                        $secondmove = $moveamount
+                $firstmove = $moveamount
+                $secondmove = $moveamount
+                switch ($tasknumber) {
+                    1 { 
+                        while ($moveamount -gt 0) {
+                            Move-Block -movefrom $movefrom -moveto $moveto
+                            $moveamount = $moveamount - 1
+                        } 
+                    }
+                    2 {
                         while ($firstmove -gt 0) {
-                
+
                             Move-Block -movefrom $movefrom -moveto 10
                             $firstmove = $firstmove - 1
                         } 
                         while ($secondmove -gt 0) {
                             Move-Block -movefrom 10 -moveto $moveto
                             $secondmove = $secondmove - 1
-                        }
-                    } 
+                        }  
+                    }
                 }
             })
+    }
+    end {
+        $one[-1] + $two[-1] + $three[-1] + $four[-1] + $five[-1] + $six[-1] + $seven[-1] + $eight[-1] + $nine[-1]    
+    }
 }
-    
-end {
-    $one[-1] + $two[-1] + $three[-1] + $four[-1] + $five[-1] + $six[-1] + $seven[-1] + $eight[-1] + $nine[-1]    
-}
-}
+Invoke-Instructionset -tasknumber 1 -instructionset $instructionset
+Invoke-Instructionset -tasknumber 2 -instructionset $instructionset
