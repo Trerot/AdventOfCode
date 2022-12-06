@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\davhei15\\repos\\AdventOfCode2022\\day6\\csharp\\adventofcode2022-csharp\\adventofcode2022-csharp\\adventofcode2022-csharp.csproj": {}
+    "C:\\Users\\davhei15\\repos\\AdventOfCode2022\\day6\\AdventOfCode2022day6-csharp\\AdventOfCode2022day6-csharp\\AdventOfCode2022day6-csharp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\davhei15\\repos\\AdventOfCode2022\\day6\\csharp\\adventofcode2022-csharp\\adventofcode2022-csharp\\adventofcode2022-csharp.csproj": {
+    "C:\\Users\\davhei15\\repos\\AdventOfCode2022\\day6\\AdventOfCode2022day6-csharp\\AdventOfCode2022day6-csharp\\AdventOfCode2022day6-csharp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\davhei15\\repos\\AdventOfCode2022\\day6\\csharp\\adventofcode2022-csharp\\adventofcode2022-csharp\\adventofcode2022-csharp.csproj",
-        "projectName": "adventofcode2022-csharp",
-        "projectPath": "C:\\Users\\davhei15\\repos\\AdventOfCode2022\\day6\\csharp\\adventofcode2022-csharp\\adventofcode2022-csharp\\adventofcode2022-csharp.csproj",
+        "projectUniqueName": "C:\\Users\\davhei15\\repos\\AdventOfCode2022\\day6\\AdventOfCode2022day6-csharp\\AdventOfCode2022day6-csharp\\AdventOfCode2022day6-csharp.csproj",
+        "projectName": "AdventOfCode2022day6-csharp",
+        "projectPath": "C:\\Users\\davhei15\\repos\\AdventOfCode2022\\day6\\AdventOfCode2022day6-csharp\\AdventOfCode2022day6-csharp\\AdventOfCode2022day6-csharp.csproj",
         "packagesPath": "C:\\Users\\davhei15\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\davhei15\\repos\\AdventOfCode2022\\day6\\csharp\\adventofcode2022-csharp\\adventofcode2022-csharp\\obj\\",
+        "outputPath": "C:\\Users\\davhei15\\repos\\AdventOfCode2022\\day6\\AdventOfCode2022day6-csharp\\AdventOfCode2022day6-csharp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
