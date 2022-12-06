@@ -1,0 +1,15 @@
+C:\Users\davhei15\repos\AdventOfCode2022\day6\AdventOfCode2022day6-csharp\AdventOfCode2022day6-csharp\bin\Debug\net7.0\AdventOfCode2022day6-csharp.exe
+C:\Users\davhei15\repos\AdventOfCode2022\day6\AdventOfCode2022day6-csharp\AdventOfCode2022day6-csharp\bin\Debug\net7.0\AdventOfCode2022day6-csharp.deps.json
+C:\Users\davhei15\repos\AdventOfCode2022\day6\AdventOfCode2022day6-csharp\AdventOfCode2022day6-csharp\bin\Debug\net7.0\AdventOfCode2022day6-csharp.runtimeconfig.json
+C:\Users\davhei15\repos\AdventOfCode2022\day6\AdventOfCode2022day6-csharp\AdventOfCode2022day6-csharp\bin\Debug\net7.0\AdventOfCode2022day6-csharp.dll
+C:\Users\davhei15\repos\AdventOfCode2022\day6\AdventOfCode2022day6-csharp\AdventOfCode2022day6-csharp\bin\Debug\net7.0\AdventOfCode2022day6-csharp.pdb
+C:\Users\davhei15\repos\AdventOfCode2022\day6\AdventOfCode2022day6-csharp\AdventOfCode2022day6-csharp\obj\Debug\net7.0\AdventOfCode2022day6-csharp.csproj.AssemblyReference.cache
+C:\Users\davhei15\repos\AdventOfCode2022\day6\AdventOfCode2022day6-csharp\AdventOfCode2022day6-csharp\obj\Debug\net7.0\AdventOfCode2022day6-csharp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\davhei15\repos\AdventOfCode2022\day6\AdventOfCode2022day6-csharp\AdventOfCode2022day6-csharp\obj\Debug\net7.0\AdventOfCode2022day6-csharp.AssemblyInfoInputs.cache
+C:\Users\davhei15\repos\AdventOfCode2022\day6\AdventOfCode2022day6-csharp\AdventOfCode2022day6-csharp\obj\Debug\net7.0\AdventOfCode2022day6-csharp.AssemblyInfo.cs
+C:\Users\davhei15\repos\AdventOfCode2022\day6\AdventOfCode2022day6-csharp\AdventOfCode2022day6-csharp\obj\Debug\net7.0\AdventOfCode2022day6-csharp.csproj.CoreCompileInputs.cache
+C:\Users\davhei15\repos\AdventOfCode2022\day6\AdventOfCode2022day6-csharp\AdventOfCode2022day6-csharp\obj\Debug\net7.0\AdventOfCode2022day6-csharp.dll
+C:\Users\davhei15\repos\AdventOfCode2022\day6\AdventOfCode2022day6-csharp\AdventOfCode2022day6-csharp\obj\Debug\net7.0\refint\AdventOfCode2022day6-csharp.dll
+C:\Users\davhei15\repos\AdventOfCode2022\day6\AdventOfCode2022day6-csharp\AdventOfCode2022day6-csharp\obj\Debug\net7.0\AdventOfCode2022day6-csharp.pdb
+C:\Users\davhei15\repos\AdventOfCode2022\day6\AdventOfCode2022day6-csharp\AdventOfCode2022day6-csharp\obj\Debug\net7.0\AdventOfCode2022day6-csharp.genruntimeconfig.cache
+C:\Users\davhei15\repos\AdventOfCode2022\day6\AdventOfCode2022day6-csharp\AdventOfCode2022day6-csharp\obj\Debug\net7.0\ref\AdventOfCode2022day6-csharp.dll

@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v7.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v7.0": {
+      "AdventOfCode2022day6-csharp/1.0.0": {
+        "runtime": {
+          "AdventOfCode2022day6-csharp.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "AdventOfCode2022day6-csharp/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
