@@ -3,8 +3,6 @@ $stuff = $filestuff
 $linenumber = 0
 $Global:currentdir = "root"
 $thingarray = New-Object -TypeName System.Collections.ArrayList
-$folderarray = New-Object -TypeName System.Collections.ArrayList
-
 # function for the CD commands
 function Invoke-PuzzleCD {
     param (
@@ -57,7 +55,6 @@ foreach ($item in $stuff) {
     }
     $linenumber ++
 }
-
 $NewThingarray = New-Object -TypeName System.Collections.ArrayList
 # find the filesizetotal for all folders, ignore all dirs, just focus on the files and create a list with path,filesizetotal,content
 foreach ($thing in $thingarray) {
@@ -86,13 +83,13 @@ foreach ($thing in $NewThingarray) {
         })
 }
 $sum = 0
-$LastThingarray.where({$_.FolderTotal -lt 100000}).FolderTotal.foreach({$sum += $_})
+$LastThingarray.where({ $_.FolderTotal -lt 100000 }).FolderTotal.foreach({ $sum += $_ })
 # answer 1
 $sum
 # task 2
 $totaldiskspace = 70000000
 $spacerequired = 30000000
 $spaceused = $LastThingarray[0].FolderTotal
-$freespace = $totaldiskspace-$spaceused
-$spacetofree =  $spacerequired-$freespace
-($LastThingarray.FolderTotal | sort).where({$_ -gt $spacetofree})[0]
+$freespace = $totaldiskspace - $spaceused
+$spacetofree = $spacerequired - $freespace
+($LastThingarray.FolderTotal | sort).where({ $_ -gt $spacetofree })[0]
