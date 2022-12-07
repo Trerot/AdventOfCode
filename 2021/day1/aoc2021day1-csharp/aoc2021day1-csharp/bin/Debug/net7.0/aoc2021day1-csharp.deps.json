@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v7.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v7.0": {
+      "aoc2021day1-csharp/1.0.0": {
+        "runtime": {
+          "aoc2021day1-csharp.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "aoc2021day1-csharp/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
