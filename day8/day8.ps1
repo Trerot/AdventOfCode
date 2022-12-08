@@ -16,8 +16,14 @@ foreach ($column in $sampleset) {
 
 $TotalVisibleTrees = 0
 
-$gridsize = 100
+$gridsize = 99
 $testcount = 0
+
+$upcount = 0
+$downcount = 0
+$leftcount = 0
+$rightcount = 0
+
 
 foreach ($item in $hashtable.GetEnumerator()) {
     [int]$r, [int]$c = $item.Name.Split(',')
@@ -27,7 +33,11 @@ foreach ($item in $hashtable.GetEnumerator()) {
     $ishiddenleft = $false
     $ishiddenright = $false
     $loopbreak = $false
-
+    $upcount = 0
+    $downcount = 0
+    $leftcount = 0
+    $rightcount = 0
+    
     if ($r -eq $gridsize -or $r -eq 1 -or $c -eq $gridsize -or $c -eq 1) { 
         $loopbreak = $true
     }
@@ -81,9 +91,77 @@ foreach ($item in $hashtable.GetEnumerator()) {
    elseif ($ishiddenleft -eq $false -or $ishiddendown -eq $false -or $ishiddentop -eq $false -or $ishiddenright -eq $false ) { $TotalVisibleTrees++ }
   
 }
-$TotalVisibleTrees
-#logikk
 
-#column logic
-# 0..$i-1 -gt $i
-# $i+1..$edgecolumn[1]
+$TotalVisibleTrees
+# taaaaaaask 2 ----------------------------------------------------------------------------------------------------------------------------------
+
+$sampleset = get-content "C:\Users\david\REPOS\AdventOfCode2022\day8\sampleset.txt"
+$sampleset = get-content "C:\Users\david\REPOS\AdventOfCode2022\day8\AOC2022day8-puzzleinput.txt"
+$gridsize = 99
+# create a hash table with all the values
+$hashtable = @{}
+$rowcounter = 1
+
+foreach ($row in $sampleset) {
+    $columncounter = 1
+    $row.ToCharArray().foreach({
+            $hashtable.Add("$rowcounter,$columncounter", "$_")
+            
+            $columncounter ++
+        })
+    $rowcounter ++
+}
+
+$HighestScenicScore = 0
+
+foreach ($item in $hashtable.GetEnumerator()) {
+    [int]$r, [int]$c = $item.Name.Split(',')
+
+    $loopbreak = $false
+
+    if ($r -eq $gridsize -or $r -eq 1 -or $c -eq $gridsize -or $c -eq 1) { 
+        $loopbreak = $true
+    }
+
+    if ($loopbreak -eq $false) {
+        $up = ($r - 1)..1
+        $down = ($r + 1)..$gridsize 
+        $left = ($c - 1)..1
+        $right = ($c + 1)..$gridsize
+        $upcount = 0
+        $downcount = 0
+        $leftcount = 0
+        $rightcount = 0
+        #$item
+        for ($i = 0; $i -lt $up.count; $i++) {
+            $upcount++
+            #'up'
+            #"$($up[$i]),$c" 
+            #$hashtable."$($up[$i]),$c"
+            #$item.Value
+            if ($hashtable."$($up[$i]),$c" -ge $item.Value) { break }
+        } 
+        for ($i = 0; $i -lt $down.Count; $i++) {
+            $downcount++
+            #"down"
+            if ($hashtable."$($down[$i]),$c" -ge $item.Value) { break }
+        } 
+        for ($i = 0; $i -lt $left.Count; $i++) {
+            $leftcount++
+            #"left"
+            if ($hashtable."$r,$($left[$i])" -ge $item.Value) { break }
+        } 
+        for ($i = 0; $i -lt $right.count; $i++) {
+            $rightcount++
+            #"right"
+            if ($hashtable."$r,$($right[$i])" -ge $item.Value) { break }
+        } 
+        $score = $upcount * $downcount * $leftcount * $rightcount
+        if ($score -gt $HighestScenicScore) { $HighestScenicScore = $score }
+    }
+}
+$HighestScenicScore
+
+# is to hight 1736280
+# is to high 648508
+# is to high 
