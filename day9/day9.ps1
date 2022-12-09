@@ -70,10 +70,8 @@ $Global:SnakeArray = New-Object -TypeName System.Collections.ArrayList
 $Global:SnakeMovesArray = New-Object -TypeName System.Collections.ArrayList
 $Global:previous = 0
 #creating the snake
-(0..9).foreach({
-        [void]$Global:SnakeArray.add(@(0, 0))
-    }) 
-
+$Global:hashtable = @{}
+('a'..'j').foreach({ $Global:hashtable.Add("$_", @(1, 0)) })
 
 function Move-H {
     param (
@@ -82,28 +80,25 @@ function Move-H {
     [char]$Direction, [int]$Distance = $item.split(" ")
     for ($i = 0; $i -lt $Distance; $i++) {
         switch ($Direction) {
-            "R" { $Global:SnakeArray[0][0] ++ }
-            "L" { $Global:SnakeArray[0][0] -- }
-            "U" { $Global:SnakeArray[0][1] ++ }
-            "D" { $Global:SnakeArray[0][1] -- }
+            "R" { $Global:hashtable.'a'[0] ++ }
+            "L" { $Global:hashtable.'a'[0]  -- }
+            "U" { $Global:hashtable.'a'[1]  ++ }
+            "D" { $Global:hashtable.'a'[1]  -- }
         }
-        [void]$Global:SnakeMovesArray.add( "0,$($Global:SnakeArray[0][0]),$($Global:SnakeArray[0][1])")
-        # snake stuff
-        # now to move the knots.
-        $Global:previous = 0
-        for ($j = 1; $j -lt $Global:SnakeArray.Count; $j++) {
-            Move-T -snakenumber $j
-        }
+        [void]$Global:SnakeMovesArray.add( "a,$($Global:hashtable.a[0]),$($Global:hashtable.a[1])")
+        # now to move the snake
+        $Global:previous = 'a'
+        ('b'..'j').ForEach({ Move-T -snakeletter $_ })  
     }
 }
 function Move-T {
     param (
-        [int]$snakenumber
+        $snakeletter
     )
     $X = 0
     $Y = 0
-    $XString = [string]($Global:SnakeArray[$Global:previous][0] - $Global:SnakeArray[$snakenumber][0])
-    $YString = [string]($Global:SnakeArray[$Global:previous][1] - $Global:SnakeArray[$snakenumber][1])
+    $XString = [string]($Global:hashtable."$Global:previous"[0] - $Global:hashtable."$snakeletter"[0])
+    $YString = [string]($Global:hashtable."$Global:previous"[1] - $Global:hashtable."$snakeletter"[1])
 
     switch (($XString + ',' + $YString)) {
         '-2,-1' { $X--; $Y-- }
@@ -129,11 +124,12 @@ function Move-T {
         '2,1' { $X++; $Y++ }
     }
     
-    $Global:SnakeArray[$snakenumber][0] += $X
-    $Global:SnakeArray[$snakenumber][1] += $Y
-    
-    $Global:SnakeMovesArray.add( "$snakenumber,$($Global:SnakeArray[$snakenumber][0]),$($Global:SnakeArray[$snakenumber][1])")
-    $Global:previous = $snakenumber
+    $Global:hashtable."$snakeletter"[0] += $X
+    $Global:hashtable."$snakeletter"[1] += $Y
+
+    $snakestring = "$snakeletter,$($Global:hashtable."$snakeletter"[0]),$($Global:hashtable."$snakeletter"[1])"
+    [void]$Global:SnakeMovesArray.add( $snakestring)
+    $Global:previous = $snakeletter
 }
 
 
