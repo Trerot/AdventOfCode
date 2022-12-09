@@ -1,7 +1,7 @@
 #each move of each knot is stored in $snakemovesarray
 #current position of each snake is stored in $hashtable
 
-$stuff = get-content 'C:\Users\david\REPOS\AdventOfCode2022\day9\puzzleinput.txt'
+$stuff = get-content 'C:\Users\david\REPOS\AdventOfCode2022\day9\mediumsampleset.txt'
 $Global:SnakeMovesArray = New-Object -TypeName System.Collections.ArrayList
 $Global:previous = 0
 #creating the snake a..j which is 10 elements, so head is a, tail is j
@@ -43,6 +43,7 @@ foreach ($line in $stuff) {
                     '2,-1' { $X++; $Y-- }
                     '2,0' { $X++ }
                     '2,1' { $X++; $Y++ }
+                    default{'do nothing'}
                 }
                 $Global:hashtable."$_"[0] += $X
                 $Global:hashtable."$_"[1] += $Y
@@ -53,8 +54,8 @@ foreach ($line in $stuff) {
     }
 }
 #task 1 answer
-($SnakeMovesArray | Group-Object | where-object { $_.name -like "b*" }).count
+($SnakeMovesArray | Group-Object | where-object { $_.name -like "b*" }).name.count
 # task 2 answer
-($SnakeMovesArray | Group-Object | where-object { $_.name -like "j*" }).count
-
+($SnakeMovesArray | Group-Object | where-object { $_.name -like "j*" }).name.count
+$hashtable
 # take a look at $hashtable to see my issue,  also present in the list containing moves
