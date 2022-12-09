@@ -1,87 +1,67 @@
-$stuff = get-content "C:\Users\davhei15\repos\AdventOfCode2022\day9\sampleset.txt"
+$stuff = get-content "C:\Users\david\REPOS\AdventOfCode2022\day9\puzzleinput.txt"
 $Arraylist = New-Object -TypeName System.Collections.ArrayList
 
-
-[global]$H = 'H', 0, 0
-[global]$T = 'T', 0, 0
+$Global:H = 'H', 0, 0
+$Global:T = 'T', 0, 0
 # $H[1] $T[1] is X
 # $H[2] $T[2] is Y
 
-[void][global]$Arraylist.add( "$($H[0]),$($H[1]),$($H[2])")
-[void][global]$Arraylist.add( "$($T[0]),$($T[1]),$($T[2])")
-
-foreach ($item in $stuff) {
-    [char]$Direction, [int]$Distance = $item.split(" ")
-    #this moves the H around
-    switch ($Direction) {
-        "U" { $Y += $Distance }
-        "D" { $Y -= $Distance }
-        "R" { $X += $Distance }
-        "L" { $X -= $Distance }
-    }
-    [global]$H[1] = $X
-    [global]$H[2] = $Y
-    [void]$Arraylist.add( "$($H[0]),$($H[1]),$($H[2])")
-    # now i need to move the tail based on H pos
-
-
-
-}
-
+[void]$Global:Arraylist.add( "$($H[0]),$($H[1]),$($H[2])")
+[void]$Global:Arraylist.add( "$($T[0]),$($T[1]),$($T[2])")
 
 function Move-H {
     param (
-        [int]$H,
-        [char]$Direction,
-        [int]$Distance
+        $item
     )
+    [char]$Direction, [int]$Distance = $item.split(" ")
     for ($i = 0; $i -lt $Distance; $i++) {
         switch ($Direction) {
-            "R" { [global]$H[1] ++ }
-            "L" { [global]$H[1] -- }
-            "U" { [global]$H[2] ++ }
-            "D" { [global]$H[2] -- }
+            "R" { $Global:H[1] ++ }
+            "L" { $Global:H[1] -- }
+            "U" { $Global:H[2] ++ }
+            "D" { $Global:H[2] -- }
         }
-        [void][global]$Arraylist.add( "$($H[0]),$($H[1]),$($H[2])")
+        [void]$Global:Arraylist.add( "$($Global:H[0]),$($Global:H[1]),$($Global:H[2])")
+        Move-T
     }
 }
-
 function Move-T {
     param (
-        $H = [global]$H,
-        $T = [global]$T
     )
     $X = 0
     $Y = 0
-    # for the x axis
-    if ($H[1] - $T[1] -gt 1) { $X ++ }
-    if ($H[1] - $T[1] -lt -1) { $X -- }
-    # for the y
-    if ($H[2] - $T[2] -gt 1 ) { $Y ++ }
-    if ($H[2] - $T[2] -lt -1) { $Y -- }
+    switch (([string]($H[1] - $T[1]) + ',' + [string]($H[2] - $T[2]))) {
+        '-2,-1' { $X--; $Y-- }
+        '-2,0' { $X-- }
+        '-2,1' { $X--; $Y++ }
+        '-1,-2' { $X--; $Y-- }
+        '-1,-1' {  }
+        '-1,0' {  }
+        '-1,1' {  }
+        '-1,2' { $X--; $Y++ }
+        '0,-2' { $Y-- }
+        '0,-1' {  }
+        '0,0' {  }
+        '0,1' {  }
+        '0,2' { $Y++ }
+        '1,-2' { $X++; $Y-- }
+        '1,-1' {  }
+        '1,0' {  }
+        '1,1' {  }
+        '1,2' { $X++; $Y++ }
+        '2,-1' { $X++; $Y-- }
+        '2,0' { $X++ }
+        '2,1' { $X++; $Y++ }
+    }
 
-    # but they should add upp to something. instead of plussing the $T they should pluss the X and Y. and if X and Y are both 1 or -1 then move diag.
+    $Global:T[1] += $X
+    $Global:T[2] += $Y
 
-    # define the four diagonal moves.
-    # up right(+ +)
-    if ($X + $Y -eq 2) {}
-    # up left(+ -)
-    if ($X -eq 1 -and $Y -eq -1) {}
-    # down right(- +)
-    if ($X -eq -1 -and $Y -eq 1) {}
-    # down left (- -)
-    if (-$X - $Y -eq -2) {}
-
-    # define the for straight moves
-    #up
-    if ($X -eq 0 -and $Y -eq 1 ) {}
-    #down
-    if ($X -eq 0 -and $Y -eq -1 ) {}
-    #right
-    if ($X -eq 1 -and $Y -eq 0 ) {}
-    #left 
-    if ($X -eq -1 -and $Y -eq 0 ) {}
-
-
-    [void]$Arraylist.add( "$($T[0]),$($T[1]),$($T[2])")
+    [void]$Arraylist.add( "$($Global:T[0]),$($Global:T[1]),$($Global:T[2])")
 }
+
+foreach ($line in $stuff) {
+    Move-H -item $line
+}
+
+($arraylist | Group-Object | where-object { $_.name -like "t*"}).count
