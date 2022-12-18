@@ -17,6 +17,7 @@ foreach ($row in $sampleset) {
         })
     $rowcounter ++
 }
+Measure-Command {
 foreach ($item in $hashtable.GetEnumerator()) {
     [int]$r, [int]$c = $item.Name.Split(',')
 
@@ -72,9 +73,11 @@ foreach ($item in $hashtable.GetEnumerator()) {
     if ($loopbreak) { $TotalVisibleTrees++ }
     elseif ($ishiddenleft -eq $false -or $ishiddendown -eq $false -or $ishiddentop -eq $false -or $ishiddenright -eq $false ) { $TotalVisibleTrees++ }
 }
+}
 $TotalVisibleTrees
 # taaaaaaask 2 ----------------------------------------------------------------------------------------------------------------------------------
 $HighestScenicScore = 0
+Measure-Command {
 foreach ($item in $hashtable.GetEnumerator()) {
     [int]$r, [int]$c = $item.Name.Split(',')
 
@@ -113,4 +116,12 @@ foreach ($item in $hashtable.GetEnumerator()) {
         if ($score -gt $HighestScenicScore) { $HighestScenicScore = $score }
     }
 }
+}
 $HighestScenicScore
+
+
+where 
+Where-Object
+?
+
+
