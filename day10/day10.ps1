@@ -15,7 +15,6 @@ function Invoke-XMultiplier {
         [void]$Global:StrengthArray.add($strength)
         $Global:multiCycle += 40
     }
-    
 }
 function Invoke-CRTPixel {
     process {
@@ -58,6 +57,3 @@ $strengtharray.foreach({ $sum += $_ })
 $sum
 [void]$Global:CRTArray.add($Global:CRTLine)
 $CRTArray
-
-
-
