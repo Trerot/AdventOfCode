@@ -1,0 +1,51 @@
+$stuff = get-content $env:temp\day4.txt
+
+$bingonums = $stuff[0] -split ","
+
+$bingotables = $stuff[1..$stuff.Length]
+$bingocomma = ($bingotables -replace "  ", ",") -replace " ", ","
+
+# replace bingo hit number with 1000.
+$counter = 0
+#create all the tables. 
+$bingocomma.foreach({
+        $item = $_
+        if ($item -eq "") {
+            $counter++
+            New-Variable -Name "table_$counter" -Value (New-Object -TypeName System.Collections.ArrayList) -Force
+
+        }
+        else {
+            ($item -split ",").foreach({(Get-Variable -name "table_$counter").value.add($_)})
+            #ConvertFrom-Csv -Delimiter "," -Header "row_1", "row_2", "row_3", "row_4", "row_5") )
+
+        }
+
+    })
+$alltables = Get-Variable -name "table_*"
+
+foreach ($num in $bingonums) {
+    if($num.Length -lt 2){
+        #this is for single digit numbers
+        $alltables
+    }
+    else {
+        #this is for non single digit numbers
+
+    }
+}
+
+#stuff from naive. 
+
+$x = @([pscustomobject]@{ row_1 = 5; row_2 = 10 },[pscustomobject]@{ row_1 = 5; row_2 = 11 })
+$x |% { Set-Variable -Name y -Value $_; $_ } |% PsObject |% Properties |? Value -eq 5 |% { $y.$($_.Name) = 6 }
+tee-object stored the whole array ... bummer
+this is somewhat the same, but more 'readable' by a not-naivE view 😉
+$x | ForEach-Object {
+    $y = $_;
+    $y.PsObject.Properties 
+        | Where-Object Value -eq 5 
+        | ForEach-Object { 
+            $y.$($_.Name) = 6
+        }
+}
