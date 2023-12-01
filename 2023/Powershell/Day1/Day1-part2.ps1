@@ -1,4 +1,4 @@
-$stuff = Get-Content "2023\Powershell\day1puzzleinput.txt"
+$stuff = Get-Content "2023\Powershell\Day1\puzzleinput.txt"
 $sum2 = 0
 $stuff.foreach({
         $line = $_

@@ -1,4 +1,4 @@
-$stuff = Get-Content "2023\Powershell\day1puzzleinput.txt"
+$stuff = Get-Content "2023\Powershell\Day1\puzzleinput.txt"
 $sum = 0
 $stuff.foreach({
         $numbers = $_ -replace "[^0-9]" 
