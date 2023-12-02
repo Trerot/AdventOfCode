@@ -1,16 +1,13 @@
 $Content = get-content .\2023\Powershell\Day2\puzzleinput.txt
-
 $sum = 0
 $Content.foreach({
-                $gamenumber, $data = $_ -split ':'
-                $gamenumber = $gamenumber -replace "[^0-9]" 
-                $hands = $data -split ";"
+                $hands = ($_ -split ':')[1] -split ";"
                 $blue = New-Object -TypeName System.Collections.ArrayList
                 $red = New-Object -TypeName System.Collections.ArrayList
                 $green = New-Object -TypeName System.Collections.ArrayList
-                $blueNums = ((($hands -split ',').TrimStart() | select-string 'blue') -replace "[^0-9]").foreach({ $blue.add([int]$_) })
-                $redNums = ((($hands -split ',').TrimStart() | select-string 'red') -replace "[^0-9]" ).foreach({ $red.add([int]$_) })
-                $greenNums = ((($hands -split ',').TrimStart() | select-string 'green') -replace "[^0-9]").foreach({ $green.add([int]$_) })
+                ((($hands -split ',').TrimStart() | select-string 'blue') -replace "[^0-9]").foreach({ [void]$blue.add([int]$_) })
+                ((($hands -split ',').TrimStart() | select-string 'red') -replace "[^0-9]" ).foreach({ [void]$red.add([int]$_) })
+                ((($hands -split ',').TrimStart() | select-string 'green') -replace "[^0-9]").foreach({ [void]$green.add([int]$_) })
                 $blue.sort()
                 $red.sort()
                 $green.sort()
