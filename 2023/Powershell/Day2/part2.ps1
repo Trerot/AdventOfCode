@@ -2,6 +2,8 @@ $Content = get-content .\2023\Powershell\Day2\puzzleinput.txt
 
 $sum = 0
 $Content.foreach({
+                $gamenumber, $data = $_ -split ':'
+                $gamenumber = $gamenumber -replace "[^0-9]" 
                 $hands = $data -split ";"
                 $blue = New-Object -TypeName System.Collections.ArrayList
                 $red = New-Object -TypeName System.Collections.ArrayList
