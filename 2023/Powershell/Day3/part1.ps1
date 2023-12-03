@@ -1,14 +1,16 @@
 
 $content = Get-Content .\2023\Powershell\Day3\testinput.txt
-
 function Add-Number {
     param (
         $number, $Numberposition, $linecounter
     )
     [void]$Global:NumberArray.Add([PSCustomObject]@{
-            number   = [int]$number
-            position = [int]$Numberposition
-            line     = [int]$linecounter
+            number       = [int]$number
+            position     = [int]$Numberposition
+            line         = [int]$linecounter
+            numberLength = [int]$number.length
+            rangeStart   = [int]$Numberposition - 1
+            rangeEnd     = [int]$Numberposition + [int]$number.length
         }
     )
     $global:Numberposition = $null
@@ -64,34 +66,20 @@ foreach ($line in $content) {
     }
     $linecounter++
 }
-
+# part above seems fine. 
 # do stuff here 
 $sum = 0
 foreach ($Number in $NumberArray) {
     # number has .number .position .line
-    
-    $numberCharLength = [int]($number.number.ToString().length)
-    $numberStartPos = [int]($Number.position - 1)
-    $numberEndPos = [int]($number.position + $numberCharLength)
+    $symbolpos = $SymbolHash.($number.line) , $SymbolHash.($number.line - 1) , $SymbolHash.($number.line + 1)
     $match = $false
-    
-    foreach ($item in $SymbolHash.($number.line - 1)) {
-        if ([int]$item -ge $numberStartPos -and $item -le $numberEndPos) {
-            $match = $true
-        }
-    }
-    foreach ($item in $SymbolHash.($number.line)) {
-        if ([int]$item -ge $numberStartPos -and $item -le $numberEndPos) {
-            $match = $true
-        }
-    }
-    foreach ($item in $SymbolHash.($number.line + 1)) {
-        if ([int]$item -ge $numberStartPos -and $item -le $numberEndPos) {
+    foreach ($symbol in $symbolpos) {
+        if ($symbol -ge $number.rangeStart -and $symbol -le $number.rangeEnd) {
             $match = $true
         }
     }
     if ($match) {
-        $sum += $number.number
+        $sum += [int]$number.number
     }
 }
 
@@ -103,3 +91,4 @@ else {
 }
 if ($sum -eq 511086 ) { "511086  is wrong" }
 if ($sum -eq 102395 ) { "102395 is wrong" }
+if ($sum -eq 43984) { "43984 is wrong" }
