@@ -6,28 +6,24 @@ function Add-Number {
         $number, $Numberposition, $linecounter
     )
     [void]$Global:NumberArray.Add([PSCustomObject]@{
-            number   = $number
-            position = $Numberposition
-            line     = $linecounter
+            number   = [int]$number
+            position = [int]$Numberposition
+            line     = [int]$linecounter
         }
     )
     $global:Numberposition = $null
     $global:number = $null
 }
-
-
 # building a symbolhash
 $SymbolHash = @{}
-$NumberHash = @{}
 $global:NumberArray = New-Object -TypeName System.Collections.ArrayList
 $linecounter = 0
+
 foreach ($line in $content) {
 
 
     $charCounter = 0
-    $symbolposition = $null
     $Numberposition = $null
-
     $number = $null
 
     # this creates hash table for symbols
@@ -35,7 +31,13 @@ foreach ($line in $content) {
 
         # symbols
         if ($char -match "[^0-9.]" ) {
-            $symbolposition += , $charCounter
+            if ($null -eq $SymbolHash.$linecounter) {
+                $SymbolHash.$linecounter = $charCounter
+            }
+            else {
+                $SymbolHash.$linecounter = $SymbolHash.$linecounter, $charCounter
+            }
+            
             if ($number.length -gt 0) {
                 Add-Number -number $number -Numberposition $Numberposition -linecounter $linecounter
             }
@@ -60,11 +62,6 @@ foreach ($line in $content) {
 
         $charcounter++
     }
-    $SymbolHash.add($linecounter, $symbolposition)
-    $NumberHash.add($linecounter, $numberobject)
-    #this should create a table for numbers
-    
-    
     $linecounter++
 }
 
@@ -73,18 +70,36 @@ $sum = 0
 foreach ($Number in $NumberArray) {
     # number has .number .position .line
     
-    $NumberPositions = ($Number.position - 1)..($number.position + $Number.number.length)
-    $symbols = $SymbolHash.($number.line -1) + $SymbolHash.($number.line) + $SymbolHash.($number.line +1)
-
-    foreach ($Item in $Numberpositions) {
-        if($symbols -contains $item){
-            $sum += $number.number
-            break
+    $numberCharLength = [int]($number.number.ToString().length)
+    $numberStartPos = [int]($Number.position - 1)
+    $numberEndPos = [int]($number.position + $numberCharLength)
+    $match = $false
+    
+    foreach ($item in $SymbolHash.($number.line - 1)) {
+        if ([int]$item -ge $numberStartPos -and $item -le $numberEndPos) {
+            $match = $true
         }
+    }
+    foreach ($item in $SymbolHash.($number.line)) {
+        if ([int]$item -ge $numberStartPos -and $item -le $numberEndPos) {
+            $match = $true
+        }
+    }
+    foreach ($item in $SymbolHash.($number.line + 1)) {
+        if ([int]$item -ge $numberStartPos -and $item -le $numberEndPos) {
+            $match = $true
+        }
+    }
+    if ($match) {
+        $sum += $number.number
     }
 }
 
-
 $sum
-if($sum -le 511086){"Sum is to low"}
-else{"This could be right"}
+if ($sum -le 511086 -or $sum -le 102395) { "Sum is to low" }
+else {
+    "This could be right" 
+    $sum
+}
+if ($sum -eq 511086 ) { "511086  is wrong" }
+if ($sum -eq 102395 ) { "102395 is wrong" }
