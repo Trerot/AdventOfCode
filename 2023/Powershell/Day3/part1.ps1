@@ -1,5 +1,11 @@
 
-$content = Get-Content .\2023\Powershell\Day3\testinput.txt
+$content = Get-Content .\2023\Powershell\Day3\puzzleinput.txt
+
+$global:NumberArray = New-Object -TypeName System.Collections.ArrayList
+$global:SymbolArray = New-Object -TypeName System.Collections.ArrayList
+$linecounter = 0
+
+# two functions to made to add numbers and symbols into $symbolarray and $numberarray
 function Add-Number {
     param (
         $number, $Numberposition, $linecounter
@@ -16,79 +22,85 @@ function Add-Number {
     $global:Numberposition = $null
     $global:number = $null
 }
-# building a symbolhash
-$SymbolHash = @{}
-$global:NumberArray = New-Object -TypeName System.Collections.ArrayList
-$linecounter = 0
+function Add-Symbol {
+    param (
+        $line,
+        $position
+    )
+    [void]$global:SymbolArray.Add([PSCustomObject]@{
+            line     = $line
+            position = $position
+        })
+}
 
+# scan through and populate the array lists $symbolarray and $numberarray
 foreach ($line in $content) {
-
-
     $charCounter = 0
     $Numberposition = $null
     $number = $null
-
-    # this creates hash table for symbols
     foreach ($char in $line.ToCharArray()) {
-
         # symbols
         if ($char -match "[^0-9.]" ) {
-            if ($null -eq $SymbolHash.$linecounter) {
-                $SymbolHash.$linecounter = $charCounter
-            }
-            else {
-                $SymbolHash.$linecounter = $SymbolHash.$linecounter, $charCounter
-            }
-            
-            if ($number.length -gt 0) {
+            Add-Symbol -line $linecounter -position $charCounter
+            if ($null -ne $number) {
                 Add-Number -number $number -Numberposition $Numberposition -linecounter $linecounter
             }
         } 
         # dots
         if ($char -match "[.]" ) {
-            if ($number.length -gt 0) {
+            if ($null -ne $number) {
                 Add-Number -number $number -Numberposition $Numberposition -linecounter $linecounter
             }
         } 
         # numbers
         if ($char -match "[0-9]" ) {
-            $number += [string]$char
+            $number = "$number" + "$char"
             if ($null -eq $Numberposition) {
                 $Numberposition = $charCounter
             }
         } 
         # if it reaches end then do something
         if ($charcounter -eq $line.Length) {
-            Add-Number -number $number -Numberposition $Numberposition -linecounter $linecounter
+            Add-Number -number [int]$number -Numberposition $Numberposition -linecounter $linecounter
         }
-
         $charcounter++
     }
     $linecounter++
 }
-# part above seems fine. 
-# do stuff here 
+# part above seems fine. generates $symbolarray and $numberarray
 $sum = 0
+# loop through the numberarray and create the sum
 foreach ($Number in $NumberArray) {
-    # number has .number .position .line
-    $symbolpos = $SymbolHash.($number.line) , $SymbolHash.($number.line - 1) , $SymbolHash.($number.line + 1)
     $match = $false
-    foreach ($symbol in $symbolpos) {
-        if ($symbol -ge $number.rangeStart -and $symbol -le $number.rangeEnd) {
-            $match = $true
+    foreach ($symbol in $SymbolArray) {
+        if (($number.line - 1) -eq $symbol.line) {
+            if ($symbol.position -ge $number.rangeStart -and $symbol.position -le $number.rangeEnd) {
+                $match = $true
+            }
+        }
+        if ($number.line -eq $symbol.line) {
+            if ($symbol.position -ge $number.rangeStart -and $symbol.position -le $number.rangeEnd) {
+                $match = $true
+            }
+        }
+        if (($number.line + 1) -eq $symbol.line) {
+            if ($symbol.position -ge $number.rangeStart -and $symbol.position -le $number.rangeEnd) {
+                $match = $true
+            }
         }
     }
-    if ($match) {
-        $sum += [int]$number.number
-    }
+    if ($match) { $sum += [int]$number.number }
 }
 
+#profit ? it works with test data. but not with the actual puzzle set..
 $sum
-if ($sum -le 511086 -or $sum -le 102395) { "Sum is to low" }
+
+'---this below is just my notes for my attempts on my dataset---'
+if ($sum -le 511086) { write-host "Sum is to low" }
 else {
-    "This could be right" 
+    write-host  "This could be right" 
     $sum
 }
-if ($sum -eq 511086 ) { "511086  is wrong" }
-if ($sum -eq 102395 ) { "102395 is wrong" }
-if ($sum -eq 43984) { "43984 is wrong" }
+if ($sum -eq 511086 ) { write-host "511086  is wrong" }
+if ($sum -eq 102395 ) { write-host "102395 is wrong" }
+if ($sum -eq 43984) { write-host "43984 is wrong" }
