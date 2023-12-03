@@ -91,16 +91,5 @@ foreach ($Number in $NumberArray) {
     }
     if ($match) { $sum += [int]$number.number }
 }
-
 #profit ? it works with test data. but not with the actual puzzle set..
 $sum
-
-write-host '---this below is just my notes for my attempts on my dataset---'
-if ($sum -le 511086) { write-host "Sum is to low" }
-else {
-    write-host  "This could be right" 
-    $sum
-}
-if ($sum -eq 511086 ) { write-host "511086  is wrong" }
-if ($sum -eq 102395 ) { write-host "102395 is wrong" }
-if ($sum -eq 43984) { write-host "43984 is wrong" }
