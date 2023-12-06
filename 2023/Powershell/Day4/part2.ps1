@@ -1,7 +1,6 @@
-$content = get-content .\2023\Powershell\Day4\testinput.txt
+$content = get-content .\2023\Powershell\Day4\puzzleinput.txt
 $sum = 0
 $cardcounter = 0
-$cardhash=@{}
 $cardarray = New-Object -TypeName System.Collections.ArrayList
 foreach ($card in $content) {
     $card = $card.split(':').split('|')
@@ -13,9 +12,28 @@ foreach ($card in $content) {
             $wincount ++
         }
     }
-$cardcounter ++
-$cardhash.add($cardcounter,$wincount)
+    [void]$cardarray.add([PSCustomObject]@{
+            card       = $cardcounter
+            wincount   = $wincount
+            multiplier = 1
+            total      = 0
+        })
+    $cardcounter ++
 }
+$cardcounter = 0
+for ($i = 0; $i -lt $cardarray.Count) {
+    while ($cardarray[$i].multiplier -gt 0) {
 
-# now i have a card hash, whick is card number and amount of wins.
-# plan is to use a for loop probably that does some magic and just adds things together using the value of hash.
+        if ($cardarray[$i].wincount -gt 0) {
+
+            for ($w = 1; $w -le ($cardarray[$i].wincount); $w++) {
+                $cardarray[($i+$w)].multiplier ++
+            }
+
+        }
+        $cardarray[$i].total ++
+        $cardarray[$i].multiplier --
+    }
+    $i ++
+}
+($cardarray.total | Measure-Object -Sum).Sum
