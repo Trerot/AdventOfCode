@@ -7,15 +7,15 @@ $cardRanks = @{
   'Q' = 12
   'J' = 11
   'T' = 10
-  9   = 9
-  8   = 8
-  7   = 7
-  6   = 6
-  5   = 5
-  4   = 4
-  3   = 3
-  2   = 2
-  1   = 1
+  '9' = 9
+  '8' = 8
+  '7' = 7
+  '6' = 6
+  '5' = 5
+  '4' = 4
+  '3' = 3
+  '2' = 2
+  '1' = 1
 }
 # just making a games array, with bid, hands and rank
 $counter = 0
@@ -61,23 +61,26 @@ foreach ($line in $collection) {
     }
     Default {}
   }
-  $strenghtarray = 0
+
+  $strenghtarray = $hand.ToCharArray().foreach({ $cardranks.[string]$_ })
+
   [void]$games.Add([PSCustomObject]@{
-      Hand       = $hand
-      Bid        = $bid
-      HandPower  = $HandPower
-      Rank       = 0
-      multiply   = 0
-      HandNumber = $counter
+      Hand          = $hand
+      Bid           = $bid
+      HandPower     = $HandPower
+      Rank          = 0
+      multiply      = 0
+      HandNumber    = $counter
       Strenghtarray = $strenghtarray
     })
   $hashgames.Add($counter , [PSCustomObject]@{
-      Hand       = $hand
-      Bid        = $bid
-      HandPower  = $HandPower
-      Rank       = 0
-      multiply   = 0
-      HandNumber = $counter
+      Hand          = $hand
+      Bid           = $bid
+      HandPower     = $HandPower
+      Rank          = 0
+      multiply      = 0
+      HandNumber    = $counter
+      Strenghtarray = $strenghtarray
     })
   $counter++
 }
@@ -92,23 +95,24 @@ foreach ($line in $collection) {
 # to fill in rank we start with getting $games.count and $i = 0
 # highest rank has the same rank as the number of games
 # find all handpower 7, if its alone give it $games.count - $i as rank. then do $i++
+
 # else compare each card until you find the winner.
+# this is what strengtharray is for, all cards have a numerical value.
+# so first compare all the ones, then just add the next number, and pick the next largest, and so on and so on until you have a winner
 $RankCounter = $games.count
 for ($i = 7; $i -gt 0; $i--) {
-  <# Action that will repeat until the condition is met #>
+  # foreach rank it does this
   $SameRankGames = $games.where({ $_.handpower -eq $i })
+  #if its just one in the rank do this.
   if ($SameRankGames.count -eq 1) {
     ($hashgames.($SameRankGames.HandNumber)).rank = $RankCounter
     $RankCounter--
   }
-  else{
-    foreach ($item in $SameRankGames) {
-      #if(){}
-
-      # i need to do this to each thing
-      ($hashgames.($SameRankGames.HandNumber)).rank = $RankCounter
-      $RankCounter--
-
+  # if its many in the rank do this
+  else {
+    for ($cardnum = 0; $cardnum -lt 5; $cardnum++) {
+      $SameRankGames.foreach({})
+      <# Action that will repeat until the condition is met #>
     }
   }
 
