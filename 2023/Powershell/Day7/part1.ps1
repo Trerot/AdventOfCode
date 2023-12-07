@@ -17,7 +17,6 @@ $cardRanks = @{
   '1' = 1
 }
 # just making a games array, with bid, hands and rank
-$counter = 0
 foreach ($line in $collection) {
   $hand, [int]$bid = $line -split ' '
   $group = $hand.ToCharArray() | Group-Object | Sort-Object count -Descending
@@ -54,7 +53,6 @@ foreach ($line in $collection) {
       }
 
     }
-    Default {}
   }
 
   $strenghtarray = $hand.ToCharArray().foreach({ $cardranks.[string]$_ })
