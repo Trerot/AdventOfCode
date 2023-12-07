@@ -2,18 +2,34 @@ $collection = get-content .\2023\Powershell\Day7\testinput.txt
 $games = new-object -TypeName System.Collections.ArrayList
 # just making a games array, with bid, hands and rank
 foreach ($line in $collection) {
-    $hand,[int]$bid = $line -split ' '
+  $hand, [int]$bid = $line -split ' '
   [void]$games.Add([PSCustomObject]@{
-    Hand = $hand
-    Bid = $bid
-    rank = $null
-  })
+      Hand = $hand
+      Bid  = $bid
+      rank = $null
+    })
 }
 # planning on charrarray and grouping the objects.
-$group = $games[2].Hand.ToCharArray() | Group-Object | Select-Object -ExpandProperty count | Group-Object | Select-Object -ExpandProperty count
-#first find all the hands
+foreach ($game in $games[-1]) {
+  $group = $game.Hand.ToCharArray() | Group-Object | Sort-Object count -Descending
+  '-----------'
+  "current hand is $($game.hand)"
+  switch ($group.count) {
+    1 { '5 of a kind' }
+    2 { 'fullhouse or four of a kind' }
+    3 {
+      if ($group[0].count -eq 3) {
+        'three of a kind'
+      }
+      else { 'two pair' }
+    }# need some more logic in this one
+    4 { 'one pair' }
+    5 { 'highcard ' }
+    Default {}
+  }
+}
 
-$group
+
 <# Every hand is exactly one type. From strongest to weakest, they are:
 
 7 Five of a kind, where all five cards have the same label: AAAAA
