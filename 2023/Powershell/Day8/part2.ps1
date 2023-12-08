@@ -1,6 +1,10 @@
 $stuff = get-content .\2023\Powershell\Day8\puzzleinput.txt
+
+# fill elementhash to quickly get L or R move.
+# a Nodes is all  *A
+# lrmoves is all lrmoves.. 
+
 $aNodes = New-Object -TypeName System.Collections.ArrayList
-$zNodes = New-Object -TypeName System.Collections.ArrayList
 $lrmoves = $stuff[0].ToCharArray()
 $ElementHash = @{}
 foreach ($element in $stuff[2..($stuff.count)]) {
@@ -16,35 +20,27 @@ foreach ($element in $stuff[2..($stuff.count)]) {
         [void]$aNodes.add($name)
     }
 }
-'done with this '
-#now find count between Zs and the name of those Zs
-$Arraylist = new-object -typename system.collections.arraylist
+#now find count between the A to the Z
 $Costs = [System.Collections.Concurrent.ConcurrentBag[psobject]]::new()
-
 $aNodes | Foreach-Object -ThrottleLimit $anodes.Count -Parallel {
     $costs = $using:costs
     $ElementHash = $using:elementhash
     $lrmoves = $using:lrmoves
-}
-'now the loop'
-foreach ($a in $aNodes) {
+    $move = $_
     $movecounter = 0
-    $move = $a
     while ($move -notlike '*z') {
         foreach ($lr in $lrmoves) {
             $move = $ElementHash.$move.$lr
             $movecounter++
             if ($move -like '*z') {
-                $arraylist.add($movecounter)
+                $costs.add($movecounter)
                 break
             }  
-            
         }
     } 
 }
-'done with this'
 # this is just stack exchange https://stackoverflow.com/questions/62673868/how-do-i-create-a-function-for-finding-the-least-common-multiple-of-a-vector-of
-# function for least common denominator. 
+# function for least common denominator. no clue why its so long. but it worked. 
 Function Find-LCD {
     PARAM (
         [Parameter (ValueFromPipeline = $true)]
@@ -87,8 +83,5 @@ Function Find-LCD {
     }
     $product
 }
-'now the answer'
 # feed it a string and voila
-$test = Find-LCD -string "$($Arraylist -join ',')"
-$answer = 14616363770447
-$test -eq $answer
+Find-LCD -string "$($costs-join ',')"
