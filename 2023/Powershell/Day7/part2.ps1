@@ -16,125 +16,115 @@ $cardRanks = @{
   '2' = 2
   '1' = 1
 }
+# rank it
+# this foreach turns a hand into a handarray, then groups similar cards
+# 2 groups, is eiter 4+1 or 3+2, so just check the count on the biggest group to figure which is which.
+# then count the jokers. and plot an if for each possible joker scenario in each possible group.
+# at the end it populates the $games array, with the power of each card, and power of each hand.
 foreach ($line in $collection) {
   $hand, [int]$bid = $line -split ' '
-  $group = $hand.ToCharArray() | Group-Object | Sort-Object count -Descending
-  # handpower switch
+  $handarray = $hand.ToCharArray()
+  $jcount = ($handarray | select-string 'j').count
+  $group = $handarray | Group-Object | Sort-Object count -Descending
   switch ($group.count) {
     2 {
       # 4+1 or 3+2
       if ($group[0].count -eq 4) {
         #4j+1
-        if ($group[0].name -eq 'J') { $HandPower = 7 }
+        if ($jcount -eq 4) { $HandPower = 7 }
         #4+1j
-        if ($group[1].name -eq 'J') { $HandPower = 7 }
+        if ($jcount -eq 1) { $HandPower = 7 }
         #4+1
-        if ($group[0].name -ne 'J' -and $group[1].name -ne 'J') { $HandPower = 6 }
+        if ($jcount -eq 0) { $HandPower = 6 }
       }
       # 3+2
       if ($group[0].count -eq 3) {
         # 3j+2
-        if ($group[0].name -eq 'j') { $HandPower = 7 }
+        if ($jcount -eq 3) { $HandPower = 7 }
         #3+2j
-        if ($group[1].name -eq 'j') { $HandPower = 7 }
+        if ($jcount -eq 2) { $HandPower = 7 }
         # 3+2
-        if ($group[0].name -ne 'j' -and $group[1].name -ne 'j'  ) { $HandPower = 5 }
+        if ($jcount -eq 0) { $HandPower = 5 }
       }
-
     }
-  
     3 {
       #3+1+1
       if ($group[0].count -eq 3) {
         # 3j+1+1
-        if ($group[0].name -eq 'J') { $HandPower = 6 }
+        if ($jcount -eq 3) { $HandPower = 6 }
         # 3+1j+1
-        if ($group[0].name -ne 'J' -and $group.name -contains 'J' ) { $HandPower = 6 }
+        if ($jcount -eq 1) { $HandPower = 6 }
         # 3+1+1
-        if ($group.name -notcontains 'J') {
+        if ($jcount -eq 0) {
           $HandPower = 4
         }
-        
       }
       # 2+2+1
       if ($group[0].count -eq 2) {
         # 2j + 2 + 1
-        if ($group[0].name -eq 'j' -or $group[1].name -eq 'j' ) {
-          #'four of a kind
+        if ($jcount -eq 2) {
           $HandPower = 6
         }
         # 2 + 2 + 1j
-        if ($group[0].name -ne 'j' -and $group[1].name -ne 'j' -and $group[2].name -eq 'j' ) {
-          # house 
+        if ($jcount -eq 1) {
           $HandPower = 5
         }
         # 2 + 2 + 1
-        if ($group.name -notcontains 'J') {
-          # two pair
+        if ($jcount -eq 0) {
           $HandPower = 3
-
         }
       }
     }
     4 {
       #2+1+1+1
       # 2j+1+1+1
-      if ($group[0].name -eq 'j') {
-        # three of a kind
+      if ($jcount -eq 2) {
         $HandPower = 4
       }
       # 2+1j+1+1
-      if ($group[0].name -ne 'j' -and $group.name -contains 'J' ) {
-        # three of a kind
+      if ($jcount -eq 1 ) {
         $HandPower = 4
       }
       # 2+1+1+1
-      if ($group.name -notcontains 'j') {
-        # a pair
+      if ($jcount -eq 0) {
         $HandPower = 2
       }
-      
     }
     5 {
       # 1+1+1+1+1 or 5
       if ($group[0].count -eq 5) { $HandPower = 7 }
       else {
-        #'highcard'
-        if ($group.name -contains 'j') {
-          # three of a kind
+        # 1j+1+1+1+1
+        if ($jcount -eq 1) {
           $HandPower = 2
         }
-        if ($group.name -notcontains 'j') {
-          # three of a kind
+        # 1+1+1+1+1
+        if ($jcount -eq 0) {
           $HandPower = 1
         }
-        # or pair if joker is here
       }
-
     }
   }
-  # i kinda did the strength array thing before i learned i could multi sort.. but lets just roll with it
-  $strenghtarray = $hand.ToCharArray().foreach({ $cardranks.[string]$_ })
-
   [void]$games.Add([PSCustomObject]@{
-      Hand      = $hand
       Bid       = $bid
       HandPower = $HandPower
       Rank      = 0
       multiply  = 0
-      1         = $strenghtarray[0]
-      2         = $strenghtarray[1]
-      3         = $strenghtarray[2]
-      4         = $strenghtarray[3]
-      5         = $strenghtarray[4]
+      1         = $cardranks."$($handarray[0])"
+      2         = $cardranks."$($handarray[1])"
+      3         = $cardranks."$($handarray[2])"
+      4         = $cardranks."$($handarray[3])"
+      5         = $cardranks."$($handarray[4])"
     })
 }
-# sort it and give it rank and multiply
+# sort in order mentioned in -property. thats enough to sum everything together. 
+$games = $games | Sort-Object -Property 'handpower', '1', '2', '3', '4', '5'
+# sum it
+$sum = 0
 $RankCounter = 1
-$games = $games | Sort-Object -Property handpower, '1', '2', '3', '4', '5'
-for ($i = 0; $i -lt $games.Count; $i++) {
-  $games[$i].rank = $RankCounter
-  $games[$i].multiply = $RankCounter * $games[$i].bid
-  $RankCounter++
-}
-($games.multiply | Measure-Object -Sum).sum
+$games.bid.foreach({
+    $sum += $RankCounter * $_
+    $RankCounter++
+  })
+# answer it
+$sum
